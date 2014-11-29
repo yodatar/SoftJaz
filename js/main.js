@@ -6,7 +6,6 @@
  .unshift()  - Inserts an element at the first position of the array:
  .shift()   -  Removes the first element of an array
 */
-
 //globalne premenne
 input = 'ahojb$';
 output = [];
@@ -57,6 +56,7 @@ $(function() {
 		$('#rulesOutput').html('');
 		$('#errorOutput').html('');
 		input = $('#input').val();
+		buffer = ['A','#'];
 		printStep();
 	});
 });
