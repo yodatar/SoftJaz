@@ -2,363 +2,358 @@
  * Created by pipo on 28.11.2014.
  */
 
-/*
- .unshift()  - Inserts an element at the first position of the array:
- .shift()   -  Removes the first element of an array
-*/
-//globalne premenne
-input = '<e/>$';
-output = [];
-buffer = ['xmldocument','#'];
+input = $('#input').val() + '$';
+buffer = ['xmldocument', '#'];
 table = [
 	{
-		terminal:/<?xml version=/,
+		terminal: /<\?xml version=/,
 		columns: [
-			{   nonterminal:'xmldocument',
-				rule:[/<?xml version= number . number ?>/,'element'],
-				ruleNum:1
+			{   nonterminal: 'xmldocument',
+				rule: [/<\?xml version=/, 'number', /\./, 'number', /\?\>/, 'element'],
+				ruleNum: 1
 			}
 		]
 	},
 	{
-		terminal:/\?>/,
+		terminal: /\?>/,
 		columns: [
-			{   nonterminal:'number1',
-				rule:[''],
-				ruleNum:4
+			{   nonterminal: 'number1',
+				rule: [],
+				ruleNum: 4
 			}
 		]
 	},
 	{
-		terminal:/./,
+		terminal: /\./,
 		columns: [
-			{   nonterminal:'number1',
-				rule:[''],
-				ruleNum:4
+			{   nonterminal: 'number1',
+				rule: [],
+				ruleNum: 4
 			},
-            {
-                nonterminal:'name1',
-				rule:['namechar','name1'],
-				ruleNum:24
-            },
-            {
-                nonterminal:'namechar',
-				rule:[/./],
-				ruleNum:28
-            }
-		]
-	},
-	{
-		terminal:/</,
-		columns: [
-			{   nonterminal:'xmldocument',
-				rule:['element'],
-				ruleNum:1
+			{
+				nonterminal: 'name1',
+				rule: ['namechar', 'name1'],
+				ruleNum: 24
 			},
-            {
-                nonterminal:'element',
-				rule:[/</,'name','tag'],
-				ruleNum:6
-            },
-            {
-                nonterminal:'element1',
-				rule:['element2','endtag'],
-				ruleNum:7
-            },
-            {
-                nonterminal:'element2',
-				rule:['element'],
-				ruleNum:10
-            }
+			{
+				nonterminal: 'namechar',
+				rule: [/\./],
+				ruleNum: 28
+			}
 		]
 	},
 	{
-		terminal:/<\//, // /<// - toto nezralo, preto tam to \
+		terminal: /</,
 		columns: [
-			{   nonterminal:'element1',
-				rule:['endtag'],
-				ruleNum:8
+			{   nonterminal: 'xmldocument',
+				rule: ['element'],
+				ruleNum: 1
 			},
-            {
-                nonterminal:'endtag',
-				rule:[/<\//,'name',/>/],
-				ruleNum:13
-            },
-            {
-                nonterminal:'word1',
-				rule:[''],
-				ruleNum:15
-            }
-		]
-	},
-	{
-		terminal:/>/,
-		columns: [
-			{   nonterminal:'tag',
-				rule:[/>/,'element1'],
-				ruleNum:12
+			{
+				nonterminal: 'element',
+				rule: [/</, 'name', 'tag'],
+				ruleNum: 6
 			},
-            {
-                nonterminal:'name1',
-				rule:[''],
-				ruleNum:23
-            }
-		]
-	},
-	{
-		terminal:/\/>/,
-		columns: [
-			{   nonterminal:'tag',
-				rule:[/\/>/],
-				ruleNum:11
+			{
+				nonterminal: 'element1',
+				rule: ['element2', 'endtag'],
+				ruleNum: 7
 			},
-            {
-                nonterminal:'name1',
-				rule:[''],
-				ruleNum:23
-            }
+			{
+				nonterminal: 'element2',
+				rule: ['element'],
+				ruleNum: 10
+			}
 		]
 	},
 	{
-		terminal:/[a-z]/,
+		terminal: /<\//, // /<// - toto nezralo, preto tam to \
 		columns: [
-			{   nonterminal:'element1',
-				rule:['element2','endtag'],
-				ruleNum:7
+			{   nonterminal: 'element1',
+				rule: ['endtag'],
+				ruleNum: 8
 			},
-            {
-                nonterminal:'element2',
-				rule:['word'],
-				ruleNum:9
-            },
-            {
-                nonterminal:'word',
-				rule:['char','word1'],
-				ruleNum:14
-            },
-            {
-                nonterminal:'word1',
-				rule:['word'],
-				ruleNum:16
-            },
-            {
-                nonterminal:'char',
-				rule:['letter'],
-				ruleNum:17
-            },
-            {
-                nonterminal:'name',
-				rule:['letter','name1'],
-				ruleNum:20
-            },
-            {
-                nonterminal:'name1',
-				rule:['namechar','name1'],
-				ruleNum:24
-            },
-            {
-                nonterminal:'namechar',
-				rule:['letter'],
-				ruleNum:25
-            },
-            {
-                nonterminal:'letter',
-				rule:[/[a-z]/],
-				ruleNum:29
-            }
-		]
-	},
-	{
-		terminal:/[0-9]/,
-		columns: [
-			{   nonterminal:'number',
-				rule:['digit','number1'],
-				ruleNum:3
+			{
+				nonterminal: 'endtag',
+				rule: [/<\//, 'name', />/],
+				ruleNum: 13
 			},
-            {
-                nonterminal:'number1',
-				rule:['number'],
-				ruleNum:5
-            },
-            {
-                nonterminal:'element1',
-				rule:['element2','endtag'],
-				ruleNum:7
-            },
-            {
-                nonterminal:'element2',
-				rule:['word'],
-				ruleNum:9
-            },
-            {
-                nonterminal:'word',
-				rule:['char','word1'],
-				ruleNum:14
-            },
-            {
-                nonterminal:'word1',
-				rule:['word'],
-				ruleNum:16
-            },
-            {
-                nonterminal:'char',
-				rule:['digit'],
-				ruleNum:18
-            },
-            {
-                nonterminal:'name1',
-				rule:['namechar','name1'],
-				ruleNum:24
-            },
-            {
-                nonterminal:'namechar',
-				rule:['digit'],
-				ruleNum:26
-            },
-            {
-                nonterminal:'digit',
-				rule:[/[0-9]/],
-				ruleNum:30
-            }
+			{
+				nonterminal: 'word1',
+				rule: [],
+				ruleNum: 15
+			}
 		]
 	},
 	{
-		terminal:/1/,
+		terminal: />/,
 		columns: [
-			{   nonterminal:'number',
-				rule:['digit','number1'],
-				ruleNum:3
+			{   nonterminal: 'tag',
+				rule: [/>/, 'element1'],
+				ruleNum: 12
 			},
-            {
-                nonterminal:'number1',
-				rule:['number'],
-				ruleNum:5
-            },
-            {
-                nonterminal:'element1',
-				rule:['element2','endtag'],
-				ruleNum:7
-            },
-            {
-                nonterminal:'element2',
-				rule:['word'],
-				ruleNum:9
-            },
-            {
-                nonterminal:'word',
-				rule:['char','word1'],
-				ruleNum:14
-            },
-            {
-                nonterminal:'word1',
-				rule:['word'],
-				ruleNum:16
-            },
-            {
-                nonterminal:'char',
-				rule:['digit'],
-				ruleNum:18
-            },
-            {
-                nonterminal:'name1',
-				rule:['namechar','name1'],
-				ruleNum:24
-            },
-            {
-                nonterminal:'namechar',
-				rule:['digit'],
-				ruleNum:26
-            },
-            {
-                nonterminal:'digit',
-				rule:[/1/],
-				ruleNum:30
-            }
+			{
+				nonterminal: 'name1',
+				rule: [],
+				ruleNum: 23
+			}
 		]
 	},
 	{
-		terminal:/_/,
+		terminal: /\/>/,
 		columns: [
-            {
-                nonterminal:'name',
-				rule:[/_/,'name1'],
-				ruleNum:21
-            }
-		]
-	},
-	{
-		terminal:/:/,
-		columns: [
-            {
-                nonterminal:'name',
-				rule:[/:/,'name1'],
-				ruleNum:22
-            }
-		]
-	},
-	{
-		terminal:/@/,
-		columns: [
-			{   nonterminal:'element1',
-				rule:['element2','endtag'],
-				ruleNum:7
+			{   nonterminal: 'tag',
+				rule: [/\/>/],
+				ruleNum: 11
 			},
-            {
-                nonterminal:'element2',
-				rule:['word'],
-				ruleNum:9
-            },
-            {
-                nonterminal:'word',
-				rule:['char','word1'],
-				ruleNum:14
-            },
-            {
-                nonterminal:'word1',
-				rule:['word'],
-				ruleNum:16
-            },
-            {
-                nonterminal:'char',
-				rule:[/@/],
-				ruleNum:19
-            },
+			{
+				nonterminal: 'name1',
+				rule: [],
+				ruleNum: 23
+			}
+		]
+	},
 	{
-		terminal:/-/,
+		terminal: /[a-zA-Z]/,
 		columns: [
-            {
-                nonterminal:'name1',
-				rule:['namechar','name1'],
-				ruleNum:24
-            },
-            {
-                nonterminal:'namechar',
-				rule:[/-/],
-				ruleNum:27
-            }
+			{   nonterminal: 'element1',
+				rule: ['element2', 'endtag'],
+				ruleNum: 7
+			},
+			{
+				nonterminal: 'element2',
+				rule: ['word'],
+				ruleNum: 9
+			},
+			{
+				nonterminal: 'word',
+				rule: ['char', 'word1'],
+				ruleNum: 14
+			},
+			{
+				nonterminal: 'word1',
+				rule: ['word'],
+				ruleNum: 16
+			},
+			{
+				nonterminal: 'char',
+				rule: ['letter'],
+				ruleNum: 17
+			},
+			{
+				nonterminal: 'name',
+				rule: ['letter', 'name1'],
+				ruleNum: 20
+			},
+			{
+				nonterminal: 'name1',
+				rule: ['namechar', 'name1'],
+				ruleNum: 24
+			},
+			{
+				nonterminal: 'namechar',
+				rule: ['letter'],
+				ruleNum: 25
+			},
+			{
+				nonterminal: 'letter',
+				rule: [/[a-zA-Z]/],
+				ruleNum: 29
+			}
+		]
+	},
+	{
+		terminal: /[0-9]/,
+		columns: [
+			{   nonterminal: 'number',
+				rule: ['digit', 'number1'],
+				ruleNum: 3
+			},
+			{
+				nonterminal: 'number1',
+				rule: ['number'],
+				ruleNum: 5
+			},
+			{
+				nonterminal: 'element1',
+				rule: ['element2', 'endtag'],
+				ruleNum: 7
+			},
+			{
+				nonterminal: 'element2',
+				rule: ['word'],
+				ruleNum: 9
+			},
+			{
+				nonterminal: 'word',
+				rule: ['char', 'word1'],
+				ruleNum: 14
+			},
+			{
+				nonterminal: 'word1',
+				rule: ['word'],
+				ruleNum: 16
+			},
+			{
+				nonterminal: 'char',
+				rule: ['digit'],
+				ruleNum: 18
+			},
+			{
+				nonterminal: 'name1',
+				rule: ['namechar', 'name1'],
+				ruleNum: 24
+			},
+			{
+				nonterminal: 'namechar',
+				rule: ['digit'],
+				ruleNum: 26
+			},
+			{
+				nonterminal: 'digit',
+				rule: [/[0-9]/],
+				ruleNum: 30
+			}
+		]
+	},
+	{
+		terminal: /[0-9]/,
+		columns: [
+			{   nonterminal: 'number',
+				rule: ['digit', 'number1'],
+				ruleNum: 3
+			},
+			{
+				nonterminal: 'number1',
+				rule: ['number'],
+				ruleNum: 5
+			},
+			{
+				nonterminal: 'element1',
+				rule: ['element2', 'endtag'],
+				ruleNum: 7
+			},
+			{
+				nonterminal: 'element2',
+				rule: ['word'],
+				ruleNum: 9
+			},
+			{
+				nonterminal: 'word',
+				rule: ['char', 'word1'],
+				ruleNum: 14
+			},
+			{
+				nonterminal: 'word1',
+				rule: ['word'],
+				ruleNum: 16
+			},
+			{
+				nonterminal: 'char',
+				rule: ['digit'],
+				ruleNum: 18
+			},
+			{
+				nonterminal: 'name1',
+				rule: ['namechar', 'name1'],
+				ruleNum: 24
+			},
+			{
+				nonterminal: 'namechar',
+				rule: ['digit'],
+				ruleNum: 26
+			},
+			{
+				nonterminal: 'digit',
+				rule: [/[0-9]/],
+				ruleNum: 30
+			}
+		]
+	},
+	{
+		terminal: /_/,
+		columns: [
+			{
+				nonterminal: 'name',
+				rule: [/_/, 'name1'],
+				ruleNum: 21
+			}
+		]
+	},
+	{
+		terminal: /:/,
+		columns: [
+			{
+				nonterminal: 'name',
+				rule: [/:/, 'name1'],
+				ruleNum: 22
+			}
+		]
+	},
+	{
+		terminal: /@/,
+		columns: [
+			{   nonterminal: 'element1',
+				rule: ['element2', 'endtag'],
+				ruleNum: 7
+			},
+			{
+				nonterminal: 'element2',
+				rule: ['word'],
+				ruleNum: 9
+			},
+			{
+				nonterminal: 'word',
+				rule: ['char', 'word1'],
+				ruleNum: 14
+			},
+			{
+				nonterminal: 'word1',
+				rule: ['word'],
+				ruleNum: 16
+			},
+			{
+				nonterminal: 'char',
+				rule: [/@/],
+				ruleNum: 19
+			}
+		]
+	},
+	{
+		terminal: /-/,
+		columns: [
+			{
+				nonterminal: 'name1',
+				rule: ['namechar', 'name1'],
+				ruleNum: 24
+			},
+			{
+				nonterminal: 'namechar',
+				rule: [/-/],
+				ruleNum: 27
+			}
 		]
 	}
-		]
-	}
+
 ];
 
 
-$(function() {
+$(function () {
 	printStep(); // vypis prveho stavu
 
-	$('.start').on('click',function() {
+	$('.start').on('click', function () {
 		analyze();
 	});
-	$('.step').on('click',function() {
+	$('.step').on('click', function () {
 		analyzeStep();
 	});
-	$('.reset').on('click',function() {
+	$('.reset').on('click', function () {
 		$('#inputOutput').html('');
 		$('#bufferOutput').html('');
 		$('#rulesOutput').html('');
 		$('#errorOutput').html('');
-		input = $('#input').val();
-		buffer = ['xmldocument','#'];
+		input = $('#input').val() + '$';
+		buffer = ['xmldocument', '#'];
 		printStep();
 	});
 });
@@ -366,22 +361,24 @@ $(function() {
 function analyze() { // urobi az dokonca
 
 	// hlavny cyklus
-	while(input.length > 0) {
-		if(analyzeStep()) break;
+	while (input.length > 0) {
+		if (analyzeStep()) break;
 	}
 }
 
 function analyzeStep() { // urobi jeden krok
 
-	if(exclude() == 'END') { return true; }
+	if (exclude() == 'END') {
+		return true;
+	}
 
 	try {
 		var ruleCurrent = getRule(buffer[0]);
-		if(! ruleCurrent) throw 'ruleNotFound';
+		if (!ruleCurrent) throw 'ruleNotFound';
 
 		doStep(ruleCurrent); // daj do buffera to pravidlo
 
-	} catch(err) {
+	} catch (err) {
 		input = input.substr(1); // zotavenie take, ze teda kasleme na jeden znak na zaciatku inputu a ideme dalej
 		printErr(err);
 	} finally {
@@ -391,9 +388,13 @@ function analyzeStep() { // urobi jeden krok
 
 
 function exclude() { // vylucovanie, ak su zaciatok 'buffer' a 'input' rovnake
+	while(input[0] == ' ') {
+		input = input.substr(1);
+	}
+
 	try {
 		var matching = (buffer[0]).exec(input);
-		while(matching && matching.index == 0) {
+		while (matching && matching.index == 0) {
 			input = input.substr(matching[0].length);
 			buffer.shift();
 
@@ -401,22 +402,23 @@ function exclude() { // vylucovanie, ak su zaciatok 'buffer' a 'input' rovnake
 
 			matching = (buffer[0]).exec(input);
 		}
-	} catch(err) {
+	} catch (err) {
 	}
 
-	if(buffer[0] == '#' && input[0] == '$') return 'END';
-	if(buffer[0] != '#' && input[0] == '$') return 'Buffer still full, input empty';
+	if (buffer[0] == '#' && input[0] == '$') return 'END';
+	if (buffer[0] != '#' && input[0] == '$') printErr('Buffer still full, input empty');
+	if (buffer[0] == '#' && input[0] != '$') printErr('Input still full, buffer empty');
 }
 
 function getRule(bufferCurrent) { // vrati pravidlo a cislo pravidla
 	var ruleCurrent;
-	for (var i=0; i < table.length ; i++) {
+	for (var i = 0; i < table.length; i++) {
 		var matching = (table[i].terminal).exec(input);
 		if (matching && matching.index == 0) {
-			for (var j=0; j < table[i].columns.length ; j++) {
-				if(table[i].columns[j].nonterminal == bufferCurrent) {
+			for (var j = 0; j < table[i].columns.length; j++) {
+				if (table[i].columns[j].nonterminal == bufferCurrent) {
 					ruleCurrent = { elements: table[i].columns[j].rule, num: table[i].columns[j].ruleNum };
-					$('#rulesOutput').append('<option>'+HtmlEncode(ruleCurrent.elements.join(','))+', '+ruleCurrent.num+'</option>');
+					$('#rulesOutput').append('<option>' + HtmlEncode(ruleCurrent.elements.join(',')) + ', ' + ruleCurrent.num + '</option>');
 					return ruleCurrent;
 				}
 			}
@@ -437,18 +439,20 @@ function printErr(err) {
 
 function printStep() {
 	var bufferStr = buffer.join(',');
+	var i = $('#inputOutput');
+	var b = $('#bufferOutput');
 
+	i.append('<option>' + HtmlEncode(input) + '</option>')
+	b.append('<option>' + HtmlEncode(bufferStr) + '</option>')
+/*	i.animate({ scrollTop: i.offset().top }, 'fast');
+	b.animate({ scrollTop: b.offset().top }, 'fast');*/
 
-
-	$('#inputOutput').append('<option>'+HtmlEncode(input)+'</option>')
-	$('#bufferOutput').append('<option>'+HtmlEncode(bufferStr)+'</option>')
 }
 
-function HtmlEncode(s)
-{
-  var el = document.createElement("div");
-  el.innerText = el.textContent = s;
-  s = el.innerHTML;
-  return s;
+function HtmlEncode(s) {
+	var el = document.createElement("div");
+	el.innerText = el.textContent = s;
+	s = el.innerHTML;
+	return s;
 }
 
