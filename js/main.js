@@ -51,6 +51,14 @@ $(function() {
 	$('.step').on('click',function() {
 		analyzeStep();
 	});
+	$('.reset').on('click',function() {
+		$('#inputOutput').html('');
+		$('#bufferOutput').html('');
+		$('#rulesOutput').html('');
+		$('#errorOutput').html('');
+		input = $('#input').val();
+		printStep();
+	});
 });
 
 function analyze() { // urobi az dokonca
