@@ -8,32 +8,32 @@
 */
 
 //globalne premenne
-input = ['a','x','b','$'];
+input = 'ahojb$';
 output = [];
 buffer = ['A','#'];
 table = [
 	{
-		terminal:'a',
+		terminal:/ahoj/,
 		columns: [
 			{   nonterminal:'A',
-				rule:['a','A'],
+				rule:[/ahoj/,'A'],
 				ruleNum:1
 			},
 			{   nonterminal:'B',
-				rule:['a','B'],
+				rule:[/a/,'B'],
 				ruleNum:2
 			}
 		]
 	},
 	{
-		terminal:'[b-z]',
+		terminal:/b/,
 		columns: [
 			{   nonterminal:'A',
-				rule:['a'],
+				rule:[/b/],
 				ruleNum:3
 			},
 			{   nonterminal:'B',
-				rule:['b'],
+				rule:[/b/],
 				ruleNum:4
 			}
 		]
@@ -56,28 +56,23 @@ $(function() {
 function analyze() { // urobi az dokonca
 
 	// hlavny cyklus
-	while(input.length > 1) {
+	while(input.length > 0) {
 		if(analyzeStep()) break;
 	}
 }
 
 function analyzeStep() { // urobi jeden krok
 
-	var inputCurrent,bufferCurrent;
-
 	if(exclude() == 'END') { return true; }
 
-	inputCurrent = input[0];
-	bufferCurrent = buffer[0];
-
 	try {
-		var ruleCurrent = getRule(inputCurrent, bufferCurrent);
+		var ruleCurrent = getRule(buffer[0]);
 		if(! ruleCurrent) throw 'ruleNotFound';
 
 		doStep(ruleCurrent); // daj do buffera to pravidlo
 
 	} catch(err) {
-		input.shift(); // zotavenie take, ze teda kasleme na tento input a ideme dalej
+		input = input.substr(1); // zotavenie take, ze teda kasleme na jeden znak na zaciatku inputu a ideme dalej
 		printErr(err);
 	} finally {
 		printStep();
@@ -87,25 +82,27 @@ function analyzeStep() { // urobi jeden krok
 
 function exclude() { // vylucovanie, ak su zaciatok 'buffer' a 'input' rovnake
 	try {
-		while(buffer[0].match(input[0])) {
-			input.shift();
+		var matching = (buffer[0]).exec(input);
+		while(matching && matching.index == 0) {
+			input = input.substr(matching[0].length);
 			buffer.shift();
 
 			printStep();
-		}
-		if(buffer[0] == '#' && input[0] == '$') return 'END';
-		if(buffer[0] != '#' && input[0] == '$') throw 'Buffer still full, input empty';
 
+			matching = (buffer[0]).exec(input);
+		}
 	} catch(err) {
-		printErr(err);
 	}
 
+	if(buffer[0] == '#' && input[0] == '$') return 'END';
+	if(buffer[0] != '#' && input[0] == '$') return 'Buffer still full, input empty';
 }
 
-function getRule(inputCurrent, bufferCurrent) { // vrati pravidlo a cislo pravidla
+function getRule(bufferCurrent) { // vrati pravidlo a cislo pravidla
 	var ruleCurrent;
 	for (var i=0; i < table.length ; i++) {
-		if (inputCurrent.match(table[i].terminal)) {
+		var matching = (table[i].terminal).exec(input);
+		if (matching && matching.index == 0) {
 			for (var j=0; j < table[i].columns.length ; j++) {
 				if(table[i].columns[j].nonterminal == bufferCurrent) {
 					ruleCurrent = { elements: table[i].columns[j].rule, num: table[i].columns[j].ruleNum };
@@ -129,9 +126,8 @@ function printErr(err) {
 }
 
 function printStep() {
-	var inputStr = input.join('');
 	var bufferStr = buffer.join('');
-	$('#inputOutput').append('<option>'+inputStr+'</option>')
+	$('#inputOutput').append('<option>'+input+'</option>')
 	$('#bufferOutput').append('<option>'+bufferStr+'</option>')
 }
 
