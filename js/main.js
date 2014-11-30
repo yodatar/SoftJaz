@@ -67,7 +67,7 @@ table = [
 		]
 	},
 	{
-		terminal: /<\//, // /<// - toto nezralo, preto tam to \
+		terminal: /<\//,
 		columns: [
 			{   nonterminal: 'element1',
 				rule: ['endtag'],
@@ -217,67 +217,25 @@ table = [
 		]
 	},
 	{
-		terminal: /[0-9]/,
-		columns: [
-			{   nonterminal: 'number',
-				rule: ['digit', 'number1'],
-				ruleNum: 3
-			},
-			{
-				nonterminal: 'number1',
-				rule: ['number'],
-				ruleNum: 5
-			},
-			{
-				nonterminal: 'element1',
-				rule: ['element2', 'endtag'],
-				ruleNum: 7
-			},
-			{
-				nonterminal: 'element2',
-				rule: ['word'],
-				ruleNum: 9
-			},
-			{
-				nonterminal: 'word',
-				rule: ['char', 'word1'],
-				ruleNum: 14
-			},
-			{
-				nonterminal: 'word1',
-				rule: ['word'],
-				ruleNum: 16
-			},
-			{
-				nonterminal: 'char',
-				rule: ['digit'],
-				ruleNum: 18
-			},
-			{
-				nonterminal: 'name1',
-				rule: ['namechar', 'name1'],
-				ruleNum: 24
-			},
-			{
-				nonterminal: 'namechar',
-				rule: ['digit'],
-				ruleNum: 26
-			},
-			{
-				nonterminal: 'digit',
-				rule: [/[0-9]/],
-				ruleNum: 30
-			}
-		]
-	},
-	{
 		terminal: /_/,
 		columns: [
 			{
 				nonterminal: 'name',
 				rule: [/_/, 'name1'],
 				ruleNum: 21
+			},
+            {
+				nonterminal: 'namechar',
+				rule: [/_/],
+				ruleNum: 27
+			},
+			{
+				nonterminal: 'name1',
+				rule: ['namechar', 'name1'],
+				ruleNum: 24
 			}
+
+
 		]
 	},
 	{
@@ -287,11 +245,21 @@ table = [
 				nonterminal: 'name',
 				rule: [/:/, 'name1'],
 				ruleNum: 22
+			},
+            {
+				nonterminal: 'namechar',
+				rule: [/:/],
+				ruleNum: 27
+			},
+			{
+				nonterminal: 'name1',
+				rule: ['namechar', 'name1'],
+				ruleNum: 24
 			}
 		]
 	},
 	{
-		terminal: /@/,
+		terminal: /[@%!*§\s]/,
 		columns: [
 			{   nonterminal: 'element1',
 				rule: ['element2', 'endtag'],
@@ -314,7 +282,7 @@ table = [
 			},
 			{
 				nonterminal: 'char',
-				rule: [/@/],
+				rule: [/[@%!*§\s]/],
 				ruleNum: 19
 			}
 		]
@@ -330,7 +298,7 @@ table = [
 			{
 				nonterminal: 'namechar',
 				rule: [/-/],
-				ruleNum: 27
+				ruleNum: 31
 			}
 		]
 	}
