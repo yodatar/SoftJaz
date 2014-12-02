@@ -324,6 +324,21 @@ $(function () {
 		buffer = ['xmldocument', '#'];
 		printStep();
 	});
+	$('.inputChoice').on('change',function(){
+		$('#input').val(this.value);
+
+		$('#inputOutput').html('');
+		$('#bufferOutput').html('');
+		$('#rulesOutput').html('');
+		$('#errorOutput').html('');
+		input = $('#input').val() + '$';
+		buffer = ['xmldocument', '#'];
+		printStep();
+	});
+
+	$('select[multiple]').scroll(function(e){
+		$('select[multiple]').scrollTop($(this).scrollTop());
+	});
 });
 
 function analyze() { // urobi az dokonca
@@ -339,27 +354,24 @@ function analyzeStep() { // urobi jeden krok
 	if (exclude() == 'END') {
 		return true;
 	}
-
+	var ruleCurrent;
 	try {
-		var ruleCurrent = getRule(buffer[0]);
+		ruleCurrent = getRule(buffer[0]);
 		if (!ruleCurrent) throw 'ruleNotFound';
 
 		doStep(ruleCurrent); // daj do buffera to pravidlo
 
 	} catch (err) {
 		input = input.substr(1); // zotavenie take, ze teda kasleme na jeden znak na zaciatku inputu a ideme dalej
+		ruleCurrent = { elements: 'RuleNotFound', num: 'ERR' };
 		printErr(err);
 	} finally {
-		printStep();
+		printStep(ruleCurrent);
 	}
 }
 
 
 function exclude() { // vylucovanie, ak su zaciatok 'buffer' a 'input' rovnake
-	while(input[0] == ' ') {
-		input = input.substr(1);
-	}
-
 	try {
 		var matching = (buffer[0]).exec(input);
 		while (matching && matching.index == 0) {
@@ -386,7 +398,6 @@ function getRule(bufferCurrent) { // vrati pravidlo a cislo pravidla
 			for (var j = 0; j < table[i].columns.length; j++) {
 				if (table[i].columns[j].nonterminal == bufferCurrent) {
 					ruleCurrent = { elements: table[i].columns[j].rule, num: table[i].columns[j].ruleNum };
-					$('#rulesOutput').append('<option>' + HtmlEncode(ruleCurrent.elements.join(',')) + ', ' + ruleCurrent.num + '</option>');
 					return ruleCurrent;
 				}
 			}
@@ -401,20 +412,25 @@ function doStep(ruleCurrent) { // urobi nahradenie v bufferi za pravidlo
 }
 
 function printErr(err) {
-	$('#errorOutput').append(err + '\n');
+	$('#errorOutput').append('<option>' + err + '</option>')
 
 }
 
-function printStep() {
+function printStep(ruleCurrent) {
 	var bufferStr = buffer.join(',');
-	var i = $('#inputOutput');
-	var b = $('#bufferOutput');
 
-	i.append('<option>' + HtmlEncode(input) + '</option>')
-	b.append('<option>' + HtmlEncode(bufferStr) + '</option>')
-/*	i.animate({ scrollTop: i.offset().top }, 'fast');
-	b.animate({ scrollTop: b.offset().top }, 'fast');*/
+	$('#inputOutput').append('<option>' + HtmlEncode(input) + '</option>');
+	$('#bufferOutput').append('<option>' + HtmlEncode(bufferStr) + '</option>');
+	if(ruleCurrent) {
+		if(ruleCurrent.num == 'ERR')
+			$('#rulesOutput').append('<option style="color: red;">' + ruleCurrent.elements + '</option>');
+		else
+			$('#rulesOutput').append('<option>' + HtmlEncode(ruleCurrent.elements.join(',')) + ', ' + ruleCurrent.num + '</option>');
+	} else {
+		$('#rulesOutput').append('<option>-</option>');
+	}
 
+	$('select[multiple]').animate({ scrollTop: 6000 }, 1);
 }
 
 function HtmlEncode(s) {

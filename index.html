@@ -8,8 +8,9 @@
 	<!-- Bootstrap core CSS -->
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<style>
-		select, textarea { width: 250px; min-height: 400px; overflow: scroll; }
+		select[multiple='multiple'], textarea { width: 250px; min-height: 400px; overflow: scroll; }
 		input#input { min-width: 500px; }
+		select.inputChoice { width: 400px; }
 	</style>
 </head>
 
@@ -42,7 +43,17 @@
 		<button type="button" class="btn btn-success start">Start</button>
 		<button type="button" class="btn btn-primary step">Step</button>
 		<button type="button" class="btn btn-danger reset">Reset</button>
-		<label for="input">Input:</label><input type="text" id="input" class="inputText" value="<?xml version=143.3000?><element>WORD</element>">
+		<label for="input">Input:</label><input type="text" id="input" class="inputText" value="&lt;element&gt;WORD&lt;/element&gt;">
+		<select class="inputChoice">
+			<option>&lt;element&gt;WORD&lt;/element&gt;</option>
+			<option>&lt;?xml version=1.1?&gt;&lt;element/&gt;</option>
+			<option>&lt;?xml version=1.1?&gt;&lt;element&gt;2 Slova&lt;/element&gt;</option>
+			<option>&lt;?xml version=143.3000?&gt;&lt;element/&gt;</option>
+			<option>&lt;?xml version=143.3000?&gt;&lt;element&gt;&lt;element2&gt;WORD&lt;/element2&gt;&lt;/element&gt;</option>
+			<option style="color: red;">&lt;elem'ent&gt;WORD&lt;/elem]ent&gt;</option>
+			<option style="color: red;">&lt;?xml version=1433000?&gt;&lt;element&gt;2 Slova&lt;/element&gt;</option>
+			<option style="color: red;">&lt;?xml version=143.3000?&gt;&lt;element&gt;&lt;element2&gt;WORD&lt;/element2&lt;/element&gt;</option>
+		</select>
 	</div>
 	<br>
 	<div class="row">
@@ -65,7 +76,7 @@
 		</div>
 		<div class="col-xs-6 col-sm-3">
 			<label for="errorOutput">Errors</label><br>
-			<textarea id="errorOutput" multiple="multiple"></textarea>
+			<select id="errorOutput" multiple="multiple"></select>
 		</div>
 	</div>
 </div>
