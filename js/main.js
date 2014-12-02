@@ -320,6 +320,8 @@ $(function () {
 		$('#bufferOutput').html('');
 		$('#rulesOutput').html('');
 		$('#errorOutput').html('');
+		$('#result').html('');
+		$('#result').removeClass('fadeIn');
 		input = $('#input').val() + '$';
 		buffer = ['xmldocument', '#'];
 		printStep();
@@ -331,6 +333,8 @@ $(function () {
 		$('#bufferOutput').html('');
 		$('#rulesOutput').html('');
 		$('#errorOutput').html('');
+		$('#result').html('');
+		$('#result').removeClass('fadeIn');
 		input = $('#input').val() + '$';
 		buffer = ['xmldocument', '#'];
 		printStep();
@@ -352,6 +356,9 @@ function analyze() { // urobi az dokonca
 function analyzeStep() { // urobi jeden krok
 
 	if (exclude() == 'END') {
+		$('#result').html('Prijaté')
+		$('#result').addClass('fadeIn');
+
 		return true;
 	}
 	var ruleCurrent;
@@ -362,6 +369,7 @@ function analyzeStep() { // urobi jeden krok
 		doStep(ruleCurrent); // daj do buffera to pravidlo
 
 	} catch (err) {
+
 		input = input.substr(1); // zotavenie take, ze teda kasleme na jeden znak na zaciatku inputu a ideme dalej
 		ruleCurrent = { elements: 'RuleNotFound', num: 'ERR' };
 		printErr(err);

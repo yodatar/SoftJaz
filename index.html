@@ -11,6 +11,40 @@
 		select[multiple='multiple'], textarea { width: 250px; min-height: 400px; overflow: scroll; }
 		input#input { min-width: 500px; }
 		select.inputChoice { width: 400px; }
+		#result {
+			text-align: center;
+			margin: 200px auto;
+			font-size: 200px;
+			text-transform: uppercase;
+			color: #FFF;
+			text-shadow: 0 0 10px #FFF, 0 0 20px #FFF, 0 0 30px #FFF, 0 0 40px #17a200, 0 0 70px #00ff18, 0 0 80px #00ff18, 0 0 100px #00ff18, 0 0 150px #00ff18;
+			position: absolute;
+			left: 300px;
+			z-index: 100;
+		}
+		.fadeIn{
+			-webkit-animation-name: fadeIn;
+			-webkit-animation-duration: 2.5s;
+			-webkit-animation-timing-function: ease-in-out;
+		}
+
+		@-webkit-keyframes fadeIn {
+			0% {
+				-webkit-transform: scale(0);
+				opacity: 0.0;
+			}
+			60% {
+				-webkit-transform: scale(1.1);
+			}
+			80% {
+				-webkit-transform: scale(0.9);
+				opacity: 1;
+			}
+			100% {
+				-webkit-transform: scale(1);
+				opacity: 1;
+			}
+		}
 	</style>
 </head>
 
@@ -38,7 +72,9 @@
 </nav>
 
 <div class="container ">
-
+	<div class="row">
+		<p id="result" class=""></p>
+	</div>
 	<div class="row">
 		<button type="button" class="btn btn-success start">Start</button>
 		<button type="button" class="btn btn-primary step">Step</button>
@@ -46,12 +82,12 @@
 		<label for="input">Input:</label><input type="text" id="input" class="inputText" value="&lt;element&gt;WORD&lt;/element&gt;">
 		<select class="inputChoice">
 			<option>&lt;element&gt;WORD&lt;/element&gt;</option>
-			<option>&lt;?xml version=1.1?&gt;&lt;element/&gt;</option>
+			<option>&lt;?xml version=1.1?&gt;&lt;:-_flkblk:/&gt;</option>
 			<option>&lt;?xml version=1.1?&gt;&lt;element&gt;2 Slova&lt;/element&gt;</option>
 			<option>&lt;?xml version=143.3000?&gt;&lt;element/&gt;</option>
 			<option>&lt;?xml version=143.3000?&gt;&lt;element&gt;&lt;element2&gt;WORD&lt;/element2&gt;&lt;/element&gt;</option>
 			<option style="color: red;">&lt;elem'ent&gt;WORD&lt;/elem]ent&gt;</option>
-			<option style="color: red;">&lt;?xml version=1433000?&gt;&lt;element&gt;2 Slova&lt;/element&gt;</option>
+			<option style="color: red;">&lt;?xml version=143.3000?&gt;&lt;element&gt;2 Slova&lt;/element&gt;asdf</option>
 			<option style="color: red;">&lt;?xml version=143.3000?&gt;&lt;element&gt;&lt;element2&gt;WORD&lt;/element2&lt;/element&gt;</option>
 		</select>
 	</div>
@@ -79,8 +115,9 @@
 			<select id="errorOutput" multiple="multiple"></select>
 		</div>
 	</div>
-</div>
+	<br>
 
+</div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
