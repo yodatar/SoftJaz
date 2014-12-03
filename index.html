@@ -14,18 +14,26 @@
 		#result {
 			text-align: center;
 			margin: 200px auto;
-			font-size: 200px;
 			text-transform: uppercase;
 			color: #FFF;
-			text-shadow: 0 0 10px #FFF, 0 0 20px #FFF, 0 0 30px #FFF, 0 0 40px #17a200, 0 0 70px #00ff18, 0 0 80px #00ff18, 0 0 100px #00ff18, 0 0 150px #00ff18;
 			position: absolute;
-			left: 300px;
+			left: 200px;
 			z-index: 100;
+			opacity: 0.0;
 		}
 		.fadeIn{
 			-webkit-animation-name: fadeIn;
-			-webkit-animation-duration: 2.5s;
+			-webkit-animation-duration: 2s;
 			-webkit-animation-timing-function: ease-in-out;
+			text-shadow: 0 0 10px #FFF, 0 0 20px #FFF, 0 0 30px #FFF, 0 0 40px #17a200, 0 0 70px #00ff18, 0 0 80px #00ff18, 0 0 100px #00ff18, 0 0 150px #00ff18;
+			font-size: 200px;
+		}
+		.fadeInRed{
+			-webkit-animation-name: fadeIn;
+			-webkit-animation-duration: 2s;
+			-webkit-animation-timing-function: ease-in-out;
+			text-shadow: 0 0 10px #FFF, 0 0 20px #FFF, 0 0 30px #FFF, 0 0 40px #a20002, 0 0 70px #ff0035, 0 0 80px #ff0035, 0 0 100px #ff0035, 0 0 150px #ff0035;
+			font-size: 140px;
 		}
 
 		@-webkit-keyframes fadeIn {
@@ -42,7 +50,7 @@
 			}
 			100% {
 				-webkit-transform: scale(1);
-				opacity: 1;
+				opacity: 0.0;
 			}
 		}
 	</style>

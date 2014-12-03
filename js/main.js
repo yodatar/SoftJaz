@@ -321,7 +321,7 @@ $(function () {
 		$('#rulesOutput').html('');
 		$('#errorOutput').html('');
 		$('#result').html('');
-		$('#result').removeClass('fadeIn');
+		$('#result').removeClass('fadeIn fadeInRed');
 		input = $('#input').val() + '$';
 		buffer = ['xmldocument', '#'];
 		printStep();
@@ -334,7 +334,7 @@ $(function () {
 		$('#rulesOutput').html('');
 		$('#errorOutput').html('');
 		$('#result').html('');
-		$('#result').removeClass('fadeIn');
+		$('#result').removeClass('fadeIn fadeInRed');
 		input = $('#input').val() + '$';
 		buffer = ['xmldocument', '#'];
 		printStep();
@@ -394,8 +394,14 @@ function exclude() { // vylucovanie, ak su zaciatok 'buffer' a 'input' rovnake
 	}
 
 	if (buffer[0] == '#' && input[0] == '$') return 'END';
-	if (buffer[0] != '#' && input[0] == '$') printErr('Buffer still full, input empty');
-	if (buffer[0] == '#' && input[0] != '$') printErr('Input still full, buffer empty');
+	if (buffer[0] != '#' && input[0] == '$') {
+		printErr('Buffer still full, input empty');
+		$('#result').html('Odmietnuté')
+		$('#result').addClass('fadeInRed');
+	}
+	if (buffer[0] == '#' && input[0] != '$') {
+		printErr('Input still full, buffer empty');
+	}
 }
 
 function getRule(bufferCurrent) { // vrati pravidlo a cislo pravidla
